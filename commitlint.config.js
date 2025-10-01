@@ -13,7 +13,7 @@
  *
  * @type {import('@commitlint/types').UserConfig}
  */
-export default {
+const commitLintConfig = {
   // Extending base conventional commit configuration for standard commit message formats
   extends: ["@commitlint/config-conventional"],
 
@@ -25,7 +25,17 @@ export default {
     "scope-enum": [
       2,
       "always",
-      ["auth", "api", "ui", "config", "build", "tests", "infra", "docs"],
+      [
+        "auth",
+        "api",
+        "ui",
+        "config",
+        "build",
+        "tests",
+        "infra",
+        "docs",
+        "deps",
+      ],
     ],
 
     // Restrict allowed commit types
@@ -45,5 +55,11 @@ export default {
         "perf",
       ],
     ],
+    "subject-case": [2, "always", "lower-case"],
+    "subject-full-stop": [2, "never", "."],
+    "subject-empty": [2, "never"],
+    "body-max-line-length": [2, "always", 100],
   },
 };
+
+export default commitLintConfig;
