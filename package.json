@@ -10,8 +10,8 @@
     "check": "next lint && tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix --cache",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx}\" --cache",
+    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx}\" --cache",
     "typecheck": "tsc --noEmit",
     "prepare": "husky"
   },
