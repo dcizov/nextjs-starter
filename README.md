@@ -28,8 +28,6 @@ npm run build
 npm start
 ```
 
-````
-
 **Node:** ≥ 18.18 (20 LTS recommended)
 **Editor:** VS Code (Prettier + ESLint extensions recommended)
 **Database:** PostgreSQL (Docker/Podman for local development)
@@ -221,4 +219,3 @@ Example commit: `feat(ui): add responsive navigation drawer`
 - **Database connection failed:** ensure Docker/Podman is running and run `./start-database.sh`
 - **Type errors with env vars:** check `src/env.js` schema matches your `.env.local`
 - **Auth not working:** verify `BETTER_AUTH_SECRET` is set and OAuth credentials are correct
-````
