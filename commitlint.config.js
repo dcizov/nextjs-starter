@@ -30,6 +30,7 @@ const commitLintConfig = {
         "api",
         "ui",
         "db",
+        "auth",
         "config",
         "build",
         "tests",
