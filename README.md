@@ -1,209 +1,195 @@
 # Next.js Starter
 
-A lean Next.js starter set up the way I like to work. I built this because existing stacks never quite matched what I wanted — either too heavy or too bare-bones.
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=flat&logo=typescript)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-06B6D4?style=flat&logo=tailwindcss)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat&logo=postgresql)
+![ESLint](https://img.shields.io/badge/ESLint-9-4B32C3?style=flat&logo=eslint)
+![Status](https://img.shields.io/badge/Status-In_Development-yellow?style=flat)
 
----
+A Next.js starter inspired by the [T3 Stack](https://create.t3.gg/). Latest stable tools, strict types, and a clean DX.
 
-## Quick start
+> [!WARNING]
+> This starter is actively being developed and is not production-ready. APIs and configurations may change. Use for learning and experimentation.
+
+## Why this starter?
+
+Building from scratch means configuration hell. Third-party starters often include too much magic or outdated dependencies. This starter provides:
+
+- **Modern stack** — Next.js 15, React 19, Tailwind v4, all latest stable
+- **Type safety everywhere** — From env vars to database queries to API calls
+- **Developer experience** — Git hooks, auto-formatting, conventional commits
+- **Minimal abstractions** — Direct, explicit patterns you can understand and extend
+
+**Philosophy**: latest stable, strict types, ESM configs, minimal abstractions.
+
+## Tech Stack
+
+| Layer      | Choice                                                                                                 | Why                                              |
+| ---------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------ |
+| Framework  | [Next.js 15](https://nextjs.org/) + [React 19](https://react.dev/)                                     | Server Components, App Router, modern full‑stack |
+| Language   | [TypeScript 5](https://www.typescriptlang.org/) (strict)                                               | Type safety end to end                           |
+| Styling    | [Tailwind CSS v4](https://tailwindcss.com/)                                                            | Utility‑first CSS, rapid UI development          |
+| Database   | [Drizzle ORM](https://orm.drizzle.team/) + [PostgreSQL](https://www.postgresql.org/)                   | Type‑safe queries, SQL‑like syntax               |
+| Auth       | [Better Auth](https://better-auth.com/)                                                                | TypeScript‑first auth with adapters              |
+| Validation | [Zod](https://zod.dev/)                                                                                | Runtime validation with type inference           |
+| Env        | [@t3-oss/env-nextjs](https://github.com/t3-oss/t3-env)                                                 | Type‑safe env vars                               |
+| Linting    | [ESLint 9](https://eslint.org/) (flat)                                                                 | Modern config, type‑aware rules                  |
+| Formatting | [Prettier 3](https://prettier.io/)                                                                     | Consistent style, Tailwind sorting               |
+| Git hooks  | [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged) | Catch issues pre‑commit                          |
+| Commits    | [Commitlint](https://commitlint.js.org/)                                                               | Conventional commits                             |
+| UI Kit     | [shadcn/ui](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/)                            | Accessible, composable components                |
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) ≥ 18.18 (20 LTS recommended)
+- [Docker](https://www.docker.com/) or [Podman](https://podman.io/) for local PostgreSQL
+
+### Quick setup
 
 ```bash
-# clone or use this repo as a template
+# 1. Install dependencies
 npm ci
-npm run dev
+npm run prepare  # Enable Git hooks
 
-# start local database
+# 2. Set up environment variables
+cp .env.example .env.local  # Then edit with your values
+
+# 3. Start database
 ./start-database.sh
+npm run db:push
 
-# build + run
-npm run build
-npm start
+# 4. Start development server
+npm run dev  # http://localhost:3000
 ```
 
-**Node:** ≥ 18.18 (20 LTS recommended) <br>
-**Editor:** VS Code (Prettier + ESLint extensions recommended) <br>
-**Database:** PostgreSQL (Docker/Podman for local development)
+### Environment variables
 
----
+Required variables in `.env.local`:
 
-## Included
-
-### Core
-
-- **Next.js 15** — React framework with App Router, Server Components, and full-stack capabilities
-- **React 19** — The library for web interfaces with Server Components and Actions
-- **TypeScript 5** — JavaScript with syntax for types (strict mode, ESM-first, checkJs: true)
-- **ESLint 9** — Find and fix problems in JavaScript code with flat config and type-aware rules
-- Prettier 3 — Opinionated code formatter with Tailwind class sorting
-- **Tailwind CSS v4** — Utility-first CSS framework for rapid UI development
-- **Commitlint** — Enforce conventional commit messages
-- **Husky** — Git hooks made easy
-- **lint-staged** — Run linters on staged git files
-
-### Data & Auth
-
-- **Drizzle ORM** — TypeScript ORM that feels like writing SQL
-- **Better Auth** — TypeScript-first auth library with framework adapters
-- **@t3-oss/env-nextjs** — Type-safe environment variables with Zod validation
-- **Local database script** — Docker/Podman PostgreSQL for development
-
-### UI
-
-- **shadcn/ui** — Copy-paste components built on Radix UI and Tailwind CSS
-
----
-
-## Useful scripts
-
-```json
-{
-  "dev": "next dev --turbo",
-  "build": "next build",
-  "start": "next start",
-  "check": "next lint && tsc --noEmit",
-  "lint": "eslint .",
-  "lint:fix": "eslint . --fix --cache",
-  "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-  "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-  "typecheck": "tsc --noEmit",
-  "db:generate": "drizzle-kit generate",
-  "db:migrate": "drizzle-kit migrate",
-  "db:push": "drizzle-kit push",
-  "db:studio": "drizzle-kit studio",
-  "prepare": "husky"
-}
-```
-
----
-
-## Environment Variables
-
-Create `.env.local` with:
-
-```env
+```bash
 # Auth
-BETTER_AUTH_SECRET="your-secret-here"
+BETTER_AUTH_SECRET="YOUR-SECRET-HERE"
 BETTER_AUTH_URL="http://localhost:3000"
-
-# OAuth providers (optional)
-GOOGLE_CLIENT_ID="your-google-client-id"
-GOOGLE_CLIENT_SECRET="your-google-client-secret"
 
 # Database
 DATABASE_URL="postgresql://postgres:password@localhost:5432/myapp"
+
+# OAuth (optional)
+GOOGLE_CLIENT_ID="YOUR-GOOGLE-CLIENT-ID"
+GOOGLE_CLIENT_SECRET="YOUR-GOOGLE-CLIENT-SECRET"
 ```
 
-Environment variables are validated at runtime via `@t3-oss/env-nextjs` in `src/env.js`.
+## Development Workflow
 
----
-
-## Database Setup
-
-Local PostgreSQL with Docker/Podman:
+### Daily workflow
 
 ```bash
-# Start database container
-./start-database.sh
-
-# Run migrations
-npm run db:push    # for development
-npm run db:migrate # for production
-
-# Open Drizzle Studio (database GUI)
-npm run db:studio
+npm run dev                # Start dev server
+# Make changes...
+git add -A
+git commit -m "feat(ui): add responsive navigation drawer"
 ```
 
-Schema is defined in `src/server/db/schema.ts` using Drizzle ORM.
+> [!NOTE]
+> Git hooks automatically run on commit: format → lint → typecheck. If any check fails, the commit is blocked.
 
----
+### Key concepts
 
-## Authentication
+- **Routes**: App Router pages in `src/app/`
+- **Database**: Edit schema → `npm run db:push` (dev) or `db:migrate` (prod)
+- **Environment**: Add to `src/env.js` + `.env.local` with type validation
+- **Components**: Pull from shadcn/ui, style with Tailwind
 
-Better Auth is pre-configured with:
+## Commands
 
-- Email/password authentication
-- Social providers (Google OAuth example included)
-- Session management with cookies
-- Type-safe client/server utilities
+| Command         | Description                   |
+| --------------- | ----------------------------- |
+| **Development** |
+| `dev`           | Start dev server with Turbo   |
+| `build`         | Production build              |
+| `start`         | Start production server       |
+| **Quality**     |
+| `check`         | Run all checks (lint + types) |
+| `lint`          | ESLint with cache             |
+| `lint:fix`      | Auto-fix issues               |
+| `typecheck`     | TypeScript validation         |
+| `format:check`  | Verify formatting             |
+| `format:write`  | Apply formatting              |
+| **Database**    |
+| `db:generate`   | Generate migrations           |
+| `db:migrate`    | Apply migrations              |
+| `db:push`       | Push schema (dev)             |
+| `db:studio`     | Drizzle Studio UI             |
 
-See `src/server/auth.ts` for configuration and `src/server/auth-client.ts` for client usage.
+## Git Hooks & Code Quality
 
----
+Automated checks on every commit via Husky + lint-staged:
 
-## Commitlint (drop-in)
+- **Pre-commit**: Format → Lint → Typecheck
+- **Commit-msg**: Enforce conventional commits
+- **Post-merge**: Auto-install dependencies
 
-```js
-/**
- * Enforces conventional commits with scoped types.
- * Example: feat(ui): add responsive navigation drawer
- */
-const commitLintConfig = {
-  extends: ["@commitlint/config-conventional"],
-  rules: {
-    "scope-empty": [2, "never"],
-    "scope-enum": [
-      2,
-      "always",
-      [
-        "auth",
-        "api",
-        "ui",
-        "db",
-        "config",
-        "build",
-        "tests",
-        "infra",
-        "docs",
-        "deps",
-      ],
-    ],
-    "type-enum": [
-      2,
-      "always",
-      [
-        "feat",
-        "fix",
-        "docs",
-        "chore",
-        "style",
-        "refactor",
-        "ci",
-        "test",
-        "revert",
-        "perf",
-      ],
-    ],
-    "subject-case": [2, "always", "lower-case"],
-    "subject-full-stop": [2, "never", "."],
-    "subject-empty": [2, "never"],
-    "body-max-line-length": [2, "always", 100],
-  },
-};
-export default commitLintConfig;
+Configuration files:
+
+- [`lint-staged.config.js`](./lint-staged.config.js) — Staged file processing
+- [`commitlint.config.js`](./commitlint.config.js) — Commit conventions
+- [`.husky/`](./.husky/) — Hook scripts
+
+### Commit format
+
+```
+<type>(<scope>): <subject>
 ```
 
-Example commit: `feat(ui): add responsive navigation drawer`
+**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `revert`  
+**Scopes**: `auth`, `api`, `ui`, `db`, `config`, `build`, `tests`, `infra`, `docs`, `deps`
 
----
+Example: `feat(auth): add magic link authentication`
 
-## Template checklist (what to change when forking)
+## Current Focus
 
-- `package.json` — update `name`, `version`, `repository`, `author`, `license`
-- `.env.local` — set your database URL and auth secrets
-- `src/server/auth.ts` — configure your auth providers
-- `src/server/db/schema.ts` — define your database schema
-- `src/env.js` — add/remove environment variables
-- `.github/*` — update CI/workflow names and badges (if present)
-- `.vscode/settings.json` — adjust workspace preferences if desired
-- `tsconfig.json`/`eslint.config.js` — adapt path aliases or loosen rules for prototypes
-- Remove or update any demo pages in `src/app/` before publishing
+### In development
 
----
+- **oRPC integration** — Type-safe RPC alternative to Server Actions
+- **Auth flows** — Login, register, password recovery pages
 
-## Quick troubleshooting
+### Planned
 
-- **Hooks not active after clone:** `npm run prepare`
-- **VS Code not using flat ESLint:** set `"eslint.useFlatConfig": true` and restart
-- **Prettier not sorting Tailwind classes:** ensure `prettier-plugin-tailwindcss` is installed and `prettier.requireConfig` is true
-- **Database connection failed:** ensure Docker/Podman is running and run `./start-database.sh`
-- **Type errors with env vars:** check `src/env.js` schema matches your `.env.local`
-- **Auth not working:** verify `BETTER_AUTH_SECRET` is set and OAuth credentials are correct
+- **Onboarding** — Email verification and profile setup
+- **RBAC** — Role-based access patterns
+- **Admin routes** — Protected dashboard examples
+- **Email templates** — Transactional email setup
+
+### Exploring
+
+- **Testing setup** — Component and integration tests
+- **Docker Compose** — Full-stack local development
+- **CI/CD** — GitHub Actions workflows
+
+## FAQ
+
+### Dependency management
+
+**After clone**: Run `npm ci` manually  
+**After merge**: Dependencies auto-install via post-merge hook  
+**After rebase**: Run `npm install` (hook may not trigger)
+
+### Database workflows
+
+**Development**: Edit schema → `npm run db:push`  
+**Production**: Edit schema → `npm run db:generate` → `npm run db:migrate`
+
+### Common issues
+
+| Issue                | Solution                             |
+| -------------------- | ------------------------------------ |
+| Hooks not working    | `npm run prepare`                    |
+| Commit rejected      | Follow conventional commits format   |
+| ESLint in VS Code    | Set `"eslint.useFlatConfig": true`   |
+| Tailwind sorting     | Check `prettier-plugin-tailwindcss`  |
+| DB connection failed | Verify Docker/Podman running         |
+| Type errors in env   | Match `src/env.js` with `.env.local` |
