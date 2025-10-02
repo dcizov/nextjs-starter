@@ -1,7 +1,7 @@
 # Next.js Starter
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=flat&logo=typescript)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?style=flat&logo=typescript)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-06B6D4?style=flat&logo=tailwindcss)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat&logo=postgresql)
