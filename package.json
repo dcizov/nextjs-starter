@@ -1,8 +1,29 @@
 {
-  "name": "next-starter",
+  "name": "nextjs-starter",
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "author": "Dimitri Cizov <dimitricizov30@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dcizov/nextjs-starter.git"
+  },
+  "keywords": [
+    "nextjs",
+    "react",
+    "typescript",
+    "tailwindcss",
+    "starter",
+    "template",
+    "boilerplate",
+    "drizzle",
+    "postgresql",
+    "better-auth",
+    "shadcn-ui",
+    "full-stack",
+    "app-router",
+    "server-components"
+  ],
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
