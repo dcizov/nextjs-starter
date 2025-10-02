@@ -19,7 +19,6 @@ export const auth = betterAuth({
   plugins: [nextCookies()],
   socialProviders: {
     google: {
-      //TODO: fix @typescript-eslint/no-unsafe-assignment
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
