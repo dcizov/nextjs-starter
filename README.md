@@ -1,15 +1,6 @@
 # Next.js Starter
 
-A lean, developer-focused template for Next.js apps. Strict defaults, ESM everywhere, and preconfigured DX so you can fork, iterate, and ship fast.
-
----
-
-## Goals
-
-- Minimal, sensible defaults for production-ready apps
-- Strict TypeScript + type-aware linting out of the box
-- Fast dev loop (Turbopack) and pre-commit safety nets
-- Easy to fork / adapt as a template repository
+A lean Next.js starter set up the way I like to work. I built this because existing stacks never quite matched what I wanted — either too heavy or too bare-bones.
 
 ---
 
@@ -18,18 +9,18 @@ A lean, developer-focused template for Next.js apps. Strict defaults, ESM everyw
 ```bash
 # clone or use this repo as a template
 npm ci
-npm run dev            # http://localhost:3000
+npm run dev
 
-# start local database (optional, for auth/data features)
-./start-database.sh    # Docker/Podman required
+# start local database
+./start-database.sh
 
 # build + run
 npm run build
 npm start
 ```
 
-**Node:** ≥ 18.18 (20 LTS recommended)
-**Editor:** VS Code (Prettier + ESLint extensions recommended)
+**Node:** ≥ 18.18 (20 LTS recommended) <br>
+**Editor:** VS Code (Prettier + ESLint extensions recommended) <br>
 **Database:** PostgreSQL (Docker/Podman for local development)
 
 ---
@@ -38,24 +29,26 @@ npm start
 
 ### Core
 
-- Next.js 15 + React 19 (App Router)
-- TypeScript 5 (strict, ESM-first, `checkJs: true`)
-- ESLint 9 — flat config + `typescript-eslint` (type-checked rules)
-- Prettier 3 + `prettier-plugin-tailwindcss`
-- Tailwind CSS v4 via `@tailwindcss/postcss`
-- Commitlint (conventional commits), Husky, lint-staged
-- ESM config files; `package.json` uses `"type": "module"`
+- **Next.js 15** — React framework with App Router, Server Components, and full-stack capabilities
+- **React 19** — The library for web interfaces with Server Components and Actions
+- **TypeScript 5** — JavaScript with syntax for types (strict mode, ESM-first, checkJs: true)
+- **ESLint 9** — Find and fix problems in JavaScript code with flat config and type-aware rules
+- Prettier 3 — Opinionated code formatter with Tailwind class sorting
+- **Tailwind CSS v4** — Utility-first CSS framework for rapid UI development
+- **Commitlint** — Enforce conventional commit messages
+- **Husky** — Git hooks made easy
+- **lint-staged** — Run linters on staged git files
 
 ### Data & Auth
 
-- **Drizzle ORM** — Type-safe database with PostgreSQL adapter
-- **Better Auth** — Modern authentication with social providers
-- **@t3-oss/env-nextjs** — Runtime env validation with Zod schemas
+- **Drizzle ORM** — TypeScript ORM that feels like writing SQL
+- **Better Auth** — TypeScript-first auth library with framework adapters
+- **@t3-oss/env-nextjs** — Type-safe environment variables with Zod validation
 - **Local database script** — Docker/Podman PostgreSQL for development
 
 ### UI
 
-- **shadcn/ui** — Copy-paste React components with Radix UI
+- **shadcn/ui** — Copy-paste components built on Radix UI and Tailwind CSS
 
 ---
 
@@ -80,8 +73,6 @@ npm start
 }
 ```
 
-Run `npm run check` in CI to replicate local gates.
-
 ---
 
 ## Environment Variables
@@ -89,16 +80,16 @@ Run `npm run check` in CI to replicate local gates.
 Create `.env.local` with:
 
 ```env
-# Database
-DATABASE_URL="postgresql://postgres:password@localhost:5432/myapp"
-
 # Auth
-BETTER_AUTH_SECRET="your-secret-here" # generate with: openssl rand -base64 32
+BETTER_AUTH_SECRET="your-secret-here"
 BETTER_AUTH_URL="http://localhost:3000"
 
 # OAuth providers (optional)
 GOOGLE_CLIENT_ID="your-google-client-id"
 GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+# Database
+DATABASE_URL="postgresql://postgres:password@localhost:5432/myapp"
 ```
 
 Environment variables are validated at runtime via `@t3-oss/env-nextjs` in `src/env.js`.
@@ -110,7 +101,7 @@ Environment variables are validated at runtime via `@t3-oss/env-nextjs` in `src/
 Local PostgreSQL with Docker/Podman:
 
 ```bash
-# Start database container (reads DATABASE_URL from .env)
+# Start database container
 ./start-database.sh
 
 # Run migrations
@@ -140,8 +131,6 @@ See `src/server/auth.ts` for configuration and `src/server/auth-client.ts` for c
 
 ## Commitlint (drop-in)
 
-Copy to `commitlint.config.js`:
-
 ```js
 /**
  * Enforces conventional commits with scoped types.
@@ -159,7 +148,6 @@ const commitLintConfig = {
         "api",
         "ui",
         "db",
-        "auth",
         "config",
         "build",
         "tests",
