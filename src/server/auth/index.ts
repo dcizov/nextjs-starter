@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth";
+import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/server/db";
 import { cache } from "react";
@@ -10,6 +10,18 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+  session: {
+    expiresIn: 60 * 60 * 24 * 7,
+    updateAge: 60 * 60 * 24,
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60,
+    },
+  },
+  rateLimit: {
+    window: 60,
+    max: 5,
+  },
   emailAndPassword: {
     enabled: true,
     async sendResetPassword({ url }) {
@@ -23,10 +35,14 @@ export const auth = betterAuth({
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
   },
-});
+} satisfies BetterAuthOptions);
 
-export const getSession = cache(async () => {
-  return await auth.api.getSession({
-    headers: await headers(),
-  });
-});
+export const getServerSession = cache(
+  async () =>
+    await auth.api.getSession({
+      headers: await headers(),
+    }),
+);
+
+export type Session = typeof auth.$Infer.Session;
+export type AuthUserType = Session["user"];

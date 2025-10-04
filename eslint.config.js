@@ -47,11 +47,11 @@ export default defineConfig(
       ],
       "drizzle/enforce-delete-with-where": [
         "error",
-        { drizzleObjectName: ["db", "ctx.db"] },
+        { drizzleObjectName: ["db", "context.db"] },
       ],
       "drizzle/enforce-update-with-where": [
         "error",
-        { drizzleObjectName: ["db", "ctx.db"] },
+        { drizzleObjectName: ["db", "context.db"] },
       ],
     },
   },
