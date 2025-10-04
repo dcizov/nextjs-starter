@@ -1,5 +1,7 @@
 import { geistMono, geistSans } from "@/lib/fonts";
 import "@/styles/globals.css";
+import "@/lib/orpc/orpc.server";
+import { ORPCProvider } from "@/lib/orpc/provider";
 
 export { metadata } from "@/lib/metadata";
 
@@ -10,7 +12,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <ORPCProvider>{children}</ORPCProvider>
+      </body>
     </html>
   );
 }
