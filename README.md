@@ -5,7 +5,7 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-06B6D4?style=flat&logo=tailwindcss)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat&logo=postgresql)
-![ESLint](https://img.shields.io/badge/ESLint-9-4B32C3?style=flat&logo=eslint)
+![TanStack Query](https://img.shields.io/badge/TanStack_Query-5-FF4154?style=flat&logo=react-query)
 ![Status](https://img.shields.io/badge/Status-In_Development-yellow?style=flat)
 
 A Next.js starter inspired by the [T3 Stack](https://create.t3.gg/). Latest stable tools, strict types, and a clean DX.
@@ -17,7 +17,7 @@ A Next.js starter inspired by the [T3 Stack](https://create.t3.gg/). Latest stab
 
 Building from scratch means configuration hell. Third-party starters often include too much magic or outdated dependencies. This starter provides:
 
-- **Modern stack** — Next.js 15, React 19, Tailwind v4, all latest stable
+- **Modern stack** — Next.js 15, React 19, Tailwind v4, oRPC, all latest stable
 - **Type safety everywhere** — From env vars to database queries to API calls
 - **Developer experience** — Git hooks, auto-formatting, conventional commits
 - **Minimal abstractions** — Direct, explicit patterns you can understand and extend
@@ -30,9 +30,11 @@ Building from scratch means configuration hell. Third-party starters often inclu
 | ---------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------ |
 | Framework  | [Next.js 15](https://nextjs.org/) + [React 19](https://react.dev/)                                     | Server Components, App Router, modern full‑stack |
 | Language   | [TypeScript 5](https://www.typescriptlang.org/) (strict)                                               | Type safety end to end                           |
+| API Layer  | [oRPC](https://orpc.unnoq.com/) + [TanStack Query](https://tanstack.com/query)                         | Type‑safe RPC with React Query integration       |
 | Styling    | [Tailwind CSS v4](https://tailwindcss.com/)                                                            | Utility‑first CSS, rapid UI development          |
 | Database   | [Drizzle ORM](https://orm.drizzle.team/) + [PostgreSQL](https://www.postgresql.org/)                   | Type‑safe queries, SQL‑like syntax               |
 | Auth       | [Better Auth](https://better-auth.com/)                                                                | TypeScript‑first auth with adapters              |
+| Email      | [Resend](https://resend.com/) + [React Email](https://react.email/)                                    | Type‑safe transactional emails                   |
 | Validation | [Zod](https://zod.dev/)                                                                                | Runtime validation with type inference           |
 | Env        | [@t3-oss/env-nextjs](https://github.com/t3-oss/t3-env)                                                 | Type‑safe env vars                               |
 | Linting    | [ESLint 9](https://eslint.org/) (flat)                                                                 | Modern config, type‑aware rules                  |
@@ -100,9 +102,56 @@ git commit -m "feat(ui): add responsive navigation drawer"
 ### Key concepts
 
 - **Routes**: App Router pages in `src/app/`
+- **API Layer**: oRPC procedures in `src/server/api/routers/`
 - **Database**: Edit schema → `npm run db:push` (dev) or `db:migrate` (prod)
 - **Environment**: Add to `src/env.js` + `.env.local` with type validation
 - **Components**: Pull from shadcn/ui, style with Tailwind
+
+### Working with oRPC
+
+**Define procedures** in `src/server/api/routers/`:
+
+```typescript
+import { publicProcedure, router } from "../orpc";
+import { z } from "zod";
+
+export const userRouter = router({
+  list: publicProcedure
+    .input(z.object({ limit: z.number().optional() }))
+    .query(async ({ context, input }) => {
+      return context.db.query.users.findMany({
+        limit: input.limit ?? 10,
+      });
+    }),
+});
+```
+
+**Use on client** with full type safety:
+
+```typescript
+"use client";
+import { orpc } from "@/lib/orpc/utils";
+
+export function UserList() {
+  const { data } = orpc.user.list.useSuspenseQuery({ limit: 10 });
+  return <div>{data.map(...)}</div>;
+}
+```
+
+**Prefetch on server** for SSR:
+
+```typescript
+import { getQueryClient } from "@/lib/orpc/hydration-server";
+import { orpc } from "@/lib/orpc/utils";
+
+export default async function Page() {
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery(
+    orpc.user.list.queryOptions({ input: { limit: 10 } })
+  );
+  return <HydrateClient client={queryClient}>...</HydrateClient>;
+}
+```
 
 ## Commands
 
@@ -150,19 +199,50 @@ Configuration files:
 
 Example: `feat(auth): add magic link authentication`
 
+## Architecture
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── api/
+│   │   ├── auth/          # Better Auth endpoints
+│   │   └── rpc/           # oRPC API handler
+│   ├── layout.tsx         # Root layout with providers
+│   └── page.tsx           # Homepage
+├── components/            # React components
+│   └── ui/               # shadcn/ui components
+├── lib/
+│   ├── orpc/             # oRPC client setup
+│   └── auth-client.ts    # Better Auth client
+├── schemas/              # Zod validation schemas
+├── server/
+│   ├── api/
+│   │   ├── orpc.ts       # Base procedures & middleware
+│   │   └── routers/      # API endpoints
+│   ├── auth/             # Auth configuration
+│   └── db/               # Database schema & client
+└── styles/               # Global CSS
+```
+
 ## Current Focus
+
+### ✅ Implemented
+
+- **oRPC integration** — Type-safe RPC with TanStack Query
+- **SSR hydration** — Server prefetching with seamless client hydration
+- **User list example** — Demonstrates full-stack data flow
 
 ### In development
 
-- **oRPC integration** — Type-safe RPC alternative to Server Actions
 - **Auth flows** — Login, register, password recovery pages
+- **Email templates** — Transactional email setup with React Email
 
 ### Planned
 
 - **Onboarding** — Email verification and profile setup
 - **RBAC** — Role-based access patterns
 - **Admin routes** — Protected dashboard examples
-- **Email templates** — Transactional email setup
+- **Error handling** — Custom error factories and boundaries
 
 ### Exploring
 
@@ -171,6 +251,19 @@ Example: `feat(auth): add magic link authentication`
 - **CI/CD** — GitHub Actions workflows
 
 ## FAQ
+
+### Why oRPC instead of tRPC or Server Actions?
+
+**oRPC** provides:
+
+- ✅ Full type safety like tRPC
+- ✅ TanStack Query integration (caching, optimistic updates)
+- ✅ Server Actions compatibility when needed
+- ✅ Simpler setup than tRPC
+- ✅ Better SSR patterns with Next.js
+
+**Use Server Actions for**: mutations tightly coupled to forms  
+**Use oRPC for**: queries, complex data flows, reusable endpoints
 
 ### Dependency management
 
@@ -193,3 +286,8 @@ Example: `feat(auth): add magic link authentication`
 | Tailwind sorting     | Check `prettier-plugin-tailwindcss`  |
 | DB connection failed | Verify Docker/Podman running         |
 | Type errors in env   | Match `src/env.js` with `.env.local` |
+| oRPC types not found | Ensure `instrumentation.ts` imports  |
+
+---
+
+**Contributions welcome!** This is a learning project. Feel free to open issues or PRs.
